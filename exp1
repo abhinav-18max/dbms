@@ -1,0 +1,360 @@
+EXPERIMENT NO 3 : DEPARTMENT - EMPLOYEE RELATIONS
+AIM:
+To write queries to create and retrieve department and employee relations using relationship constraints, indices, DDL & amp; DML commands, Views, built in functions, set operations, aggregate functions, grouping and ordering clauses.
+QUESTIONS
+1.Return details of all managers from employee table sorted alphabetically by name
+2. Return details of all employees in department 40 ordered by EMPNO
+3. Return information about all female employee ordered by NAME.
+4. Find Minimum, Maximum and Average salary of employees in each department
+5. Find Maximum and Minimum commission paid(COMM),total commission paid and count of employees
+who were paid with commission
+6. Number of employees listed in each job
+7. Total salary paid to each job in the category
+8. Return all DEPT_ÑOs in employee table(Ensure that each DEPT_ÑO appears only once)
+9. Return EMPNO,NAME and SALARY of females in department 10
+10. Return EMPNO, NAME and SALARY of all male managers ordered by NAME
+11. Return NAME and JOB of all female sales man and managers
+12. Display EMPNO and NAME of employees in employee table who are a either manager or a clerk in department 50
+13. List the name of employee who are neither a clerk nor a salesman
+14. Return details of all clerks working in departments other than department 10
+15. Find names of employees containing letters U and E
+16. List all employee who earned commission.
+17. Find EMPNO ,NAME and JOB of all females who are not managers
+18. Find EMPNO,NAME and SALARY of all employees who earn more than 10000 but less than 40000
+19. Use lN operator to find NAME and EMPNO of EMPLOYEE who are analyst or manager ordered by NAME
+20. Find the employee number, name and salary who been paid commission and whose salary is greater than 30000
+21. Find DEP-NO ,DEP-NAME, SALARY, JOB, SEX ordered by EMPNO within department
+22. Display the name of employee and dependant name if dependant is staying in the same location where employee is
+working
+23. Find company location of employee named Watson
+24. Find name, EMPNO,DEP-NAME for all employee who work in HOUSTON and order by EMPNO in descending
+order
+25. Retrieve NAME and SALARY of all employee who earned more than average salary.
+26. Find NAME, JOB, DEP NAME, LOCATION of all female employee order by EMPNAME.
+27. Find the EMPNAME,DEP,NAME of all manager order by department name.
+28. Find NAME and DEP-NAME of employee who earns highest salary.
+29. Find name, department name, commission of all employee who paid commission order by name
+ 
+30. Display employee name and department name of all employees working in departments that has at least three
+employees. Order the output in alphabetical order first by department name and then by employee name
+31. Find name, department name and commission of all employees who paid commission order by name
+32. List name and salary of all employee in department number l0 and 30
+33. List jobs of employees in department 30 which are not done in department 40
+34. List out job and salary of employees in department l0 and 40 who draw the same salary
+35. Create a view to display EMPNO’ NAME ‘, JOB of employee from employee table who works as manager
+36. Select EMPNO, NAME,JOB and SALARY of employee who works as clerk and having salary greater than 1650.
+37. Create an index for column FNAME and LNAME in Dependant table
+38. Delete person with ID=1031 in Dependant table
+39. Return EMPNO,NAME and SALARY of any one of the females in department 10
+40. Delete the employee Karthika with all her dependants
+CREATING THE TABLES
+CREATE TABLE DEPARTMENT ( 
+DEP_NO NUMBER NOT NULL, 
+DEP_NAME VARCHAR2(15) NOT NULL,
+ LOC VARCHAR2(15) NOT NULL, 
+MGR NUMBER NOT NULL, 
+EXP_BDG NUMBER NOT NULL,
+ REV_BDC NUMBER NOT NULL,
+PRIMARY KEY(DEP_NO)
+);
+
+CREATE TABLE EMPLOYEE ( 
+EMPNO NUMBER NOT NULL, 
+EMP_NAME VARCHAR2(15),
+JOB VARCHAR2(15), 
+SALARY NUMBER NOT NULL, 
+COMM VARCHAR2(15), 
+DEP_NO NUMBER, 
+SEX VARCHAR2(6), 
+PRIMARY KEY(EMPNO)
+);
+
+CREATE TABLE DEPENDANT ( 
+PID NUMBER NOT NULL, 
+FNAME VARCHAR2(15) NOT NULL,
+LNAME VARCHAR2(15) NOT NULL, 
+PLACE VARCHAR2(15) NOT NULL,
+EMPNO NUMBER, 
+FOREIGN KEY(EMPNO) REFERENCES EMPLOYEE(EMPNO) ON DELETE CASCADE,
+PRIMARY KEY(PID)
+);
+
+INSERTING THE VALUES
+INSERT ALL
+INTO DEPARTMENT VALUES(60,'Shipping','Trivandrum',215,90000,0)
+INTO DEPARTMENT VALUES(10,'Accounting','Cochin',215,90000,0)
+INTO DEPARTMENT VALUES(30,'Research','Cochin',215,90000,0)
+INTO DEPARTMENT VALUES(40,'Sales','Trichur',215,90000,0)
+INTO DEPARTMENT VALUES(50,'Manufacturing','Kottayam',215,90000,0)
+INTO EMPLOYEE VALUES (100,'Wilson','CLRK',17000,NULL,10,'M')
+INTO EMPLOYEE VALUES(101,'Smith','SLSM',25000,'1300',40,'F')
+INTO EMPLOYEE VALUES (103,'Roy','ANLST',35000,NULL,30,'M')
+INTO EMPLOYEE VALUES (105,'Watson','MNGR',45000,'0',30,'M')
+INTO EMPLOYEE VALUES (109,'Anil','MNGR',30000,'8000',40,'M')
+INTO EMPLOYEE VALUES (110,'Tulasi','CLRK',18000,NULL,50,'F')
+INTO EMPLOYEE VALUES (200,'Karthika','MNGR',29000,NULL,10,'F')
+INTO EMPLOYEE VALUES (210,'Rama','MNGR',36500,NULL,50,'F')
+INTO EMPLOYEE VALUES (213,'Manacy','CLRK',16250,NULL,10,'F')
+INTO EMPLOYEE VALUES (214,'Simpson','DRVR',8250,NULL,60,'M')
+INTO EMPLOYEE VALUES (215,'Deepa','ANLST',27000,NULL,60,'F')
+INTO EMPLOYEE VALUES (220,'Sosamma','SLSM',28500,'5300',60,'F')
+INTO DEPENDANT VALUES (1010,'Anu','Jose','Trivandrum',214)
+INTO DEPENDANT VALUES (1020,'Neenu','Thampi','Kollam',200)
+INTO DEPENDANT VALUES (1022,'Anamika','Thampi','Kollam',200)
+INTO DEPENDANT VALUES (1031,'Swetha','Das','Kottayam',109) 
+SELECT * FROM dual;
+
+QUERIES
+
+1. Return details of all managers from employee table sorted alphabetically by name
+Ans: SELECT * FROM EMPLOYEE WHERE JOB='MNGR' ORDER BY(EMP_NAME);
+
+
+
+2. Return details of all employees in department 40 ordered by EMPNO
+Ans: SELECT * FROM EMPLOYEE WHERE DEP_NO=40 ORDER BY EMPNO;
+
+
+
+
+
+
+
+
+
+3. Return information about all female employee ordered by NAME.
+Ans: SELECT * FROM EMPLOYEE WHERE SEX='F' ORDER BY EMP_NAME;
+
+
+4. Find Minimum, Maximum and Average salary of employees in each department.
+Ans: SELECT DEP_NO,MIN(SALARY),MAX(SALARY),AVG(SALARY) FROM EMPLOYEE GROUP BY DEP_NO;
+
+
+
+5. Find Maximum and Minimum commission paid(COMM), total commission paid and count of employees who were paid with commission.
+Ans: SELECT MIN(COMM),MAX(COMM), SUM(COMM), COUNT(EMPNO) FROM EMPLOYEE WHERE COMM>0;
+
+
+
+
+
+
+6. Number of employees listed in each job.
+Ans: SELECT JOB, COUNT(*) FROM EMPLOYEE GROUP BY JOB;
+
+
+7. Total salary paid to each job in the category.
+Ans: SELECT JOB, SUM(SALARY) FROM EMPLOYEE GROUP BY JOB;
+
+
+
+8. Return all DEPT_NOs in employee table(Ensure that each DEPT_NO appears only once).
+Ans: SELECT DEP_NO FROM EMPLOYEE GROUP BY DEP_NO;
+
+
+
+
+9. Return EMPNO,NAME and SALARY of females in department 10.
+Ans: SELECT EMPNO,EMP_NAME,SALARY,DEP_NO FROM EMPLOYEE WHERE SEX='F'AND DEP_NO=10;
+
+10. Return EMPNO, NAME and SALARY of all male managers ordered by NAME
+Ans: SELECT EMPNO,EMP_NAME,SALARY FROM EMPLOYEE WHERE SEX='M' AND JOB=’MNGR’ ORDER BY EMP_NAME;
+
+
+11. Return NAME and JOB of all female sales man and managers.
+Ans: SELECT EMP_NAME, JOB, SEX FROM EMPLOYEE WHERE SEX='F' AND JOB='MNGR' OR JOB='SLSM';
+
+
+
+12. Display EMPNO and NAME of employees in employee table who are either manager or a clerk in department 50.
+Ans: SELECT EMPNO, EMP_NAME, JOB, DEP_NO FROM EMPLOYEE WHERE DEP_NO=50 AND (JOB='MNGR' OR JOB='CLRK');
+
+
+
+13. List the name of employees who are neither a clerk nor a salesman.
+Ans: SELECT EMP_NAME, JOB FROM EMPLOYEE WHERE JOB!='SLSM' AND JOB!='CLRK'; 
+
+
+14. Return details of all clerks working in departments other than department      10
+Ans: SELECT * FROM EMPLOYEE WHERE JOB='CLRK' AND DEP_NO!=10;
+
+
+15. Find names of employees containing letters U and E.
+Ans: SELECT EMP_NAME FROM EMPLOYEE WHERE EMP_NAME LIKE '%U%' OR EMP_NAME LIKE '%E%' OR EMP_NAME LIKE '%u%' OR EMP_NAME LIKE '%e%';
+
+
+16. List all employee who earned commission.
+Ans: SELECT * FROM EMPLOYEE WHERE COMM>0;
+
+
+
+17. Find EMPNO, NAME and JOB of all females who are not managers.
+Ans: SELECT EMPNO, EMP_NAME, JOB, SEX FROM EMPLOYEE WHERE JOB!='MNGR' AND SEX='F';
+
+
+18. Find EMPNO, NAME and SALARY of all employees who earn more than 10000 but less than 40000.
+Ans: SELECT EMPNO, EMP_NAME , SALARY FROM EMPLOYEE WHERE SALARY>10000 AND SALARY<40000;
+
+
+
+
+
+
+
+
+
+
+19. Use lN operator to find NAME and EMPNO of EMPLOYEE who are analyst or manager ordered by NAME.
+Ans: SELECT EMPNO, EMP_NAME, JOB FROM EMPLOYEE WHERE JOB IN ('ANLST','MNGR') ORDER BY EMP_NAME;
+
+
+
+
+20. Find the employee number, name and salary who has been paid commission and whose salary is greater than 30000.
+Ans: SELECT EMPNO, EMP_NAME, SALARY, COMM FROM EMPLOYEE WHERE SALARY>30000 AND COMM>0;
+
+NO DATA IS FOUND
+
+
+
+
+
+
+
+
+
+
+
+
+
+21. Find DEP-NO ,DEP-NAME, SALARY, JOB, SEX ordered by EMPNO within department.
+Ans: SELECT EMPLOYEE.EMPNO, DEPARTMENT.DEP_NO, DEPARTMENT.DEP_NAME, EMPLOYEE.SALARY, EMPLOYEE.JOB, EMPLOYEE.SEX FROM DEPARTMENT INNER JOIN EMPLOYEE ON EMPLOYEE.DEP_NO = DEPARTMENT.DEP_NO ORDER BY EMPLOYEE.EMPNO;
+
+
+
+
+22. Display the name of employee and dependant name if dependant is staying in the same location where employee is working.
+Ans: SELECT EMP_NAME,FNAME,LNAME,PLACE FROM EMPLOYEE INNER JOIN DEPARTMENT ON EMPLOYEE.DEP_NO=DEPARTMENT.DEP_NO INNER JOIN DEPENDANT ON DEPENDANT.PLACE=DEPARTMENT.LOC;
+
+
+
+
+23. Find company location of employee named Watson
+Ans: SELECT EMPLOYEE.EMP_NAME,DEPARTMENT.LOC FROM DEPARTMENT INNER JOIN EMPLOYEE ON EMPLOYEE.DEP_NO=DEPARTMENT.DEP_NO AND EMPLOYEE.EMP_NAME='Watson';
+
+
+
+24. Find name, EMPNO, DEP-NAME for all employee who work in TRICHUR and order by EMPNO in descending order.
+Ans: SELECT EMPLOYEE.EMPNO, DEPARTMENT.DEP_NO, DEPARTMENT.LOC FROM EMPLOYEE INNER JOIN DEPARTMENT ON DEPARTMENT.DEP_NO=EMPLOYEE.DEP_NO WHERE LOC='Trichur' ORDER BY EMPNO DESC;
+
+
+ 
+25. Retrieve NAME and SALARY of all employee who earned more than average salary.
+Ans: SELECT EMP_NAME, SALARY FROM EMPLOYEE WHERE SALARY>ALL(SELECT AVG(SALARY) FROM EMPLOYEE);
+
+
+
+
+
+26. Find NAME, JOB, DEP NAME, LOCATION of all female employee order by EMPNAME 
+Ans: SELECT EMPLOYEE.EMP_NAME, EMPLOYEE.JOB, DEPARTMENT.DEP_NAME, DEPARTMENT.LOC FROM DEPARTMENT INNER JOIN EMPLOYEE ON EMPLOYEE.DEP_NO=DEPARTMENT.DEP_NO WHERE SEX='F' ORDER BY EMP_NAME;
+
+
+
+27. Find the EMPNAME, DEP NAME of all manager order by department name.
+Ans: SELECT EMPLOYEE.EMP_NAME, DEPARTMENT.DEP_NAME, EMPLOYEE.JOB FROM DEPARTMENT INNER JOIN EMPLOYEE ON EMPLOYEE.DEP_NO=DEPARTMENT.DEP_NO WHERE JOB='MNGR' ORDER BY DEP_NAME;
+
+
+
+28. Find NAME and DEP-NAME of employee who earns highest salary.
+Ans: SELECT EMPLOYEE.EMP_NAME, DEPARTMENT.DEP_NAME, EMPLOYEE.SALARY FROM DEPARTMENT INNER JOIN EMPLOYEE ON EMPLOYEE.DEP_NO=DEPARTMENT.DEP_NO WHERE SALARY=ALL(SELECT MAX(SALARY) FROM EMPLOYEE);
+
+
+
+29. Find name, department name, commission of all employee who paid commission order by name.
+Ans: SELECT EMPLOYEE.EMP_NAME, DEPARTMENT.DEP_NAME, EMPLOYEE.COMM FROM DEPARTMENT INNER JOIN EMPLOYEE ON EMPLOYEE.DEP_NO=DEPARTMENT.DEP_NO WHERE COMM>0 ORDER BY EMP_NAME;
+
+
+
+30. Display employee name and department name of all employees working in departments that has at least three employees. Order the output in alphabetical order first by department name and then by employee name.
+Ans:  select E.EMP_NAME,D.DEP_NAME from EMPLOYEE E INNER JOIN DEPARTMENT D ON E.DEP_NO=D.DEP_NO WHERE D.DEP_NO IN ( select dep_no from EMPLOYEE having count(*)>=3 group by dep_no) ORDER BY D.DEP_NAME,E.EMP_NAME;
+
+.
+
+
+
+
+
+
+
+
+
+
+31. Find name, department name and commission of all employees who have not paid commission order by name
+Ans: SELECT EMPLOYEE.EMP_NAME, DEPARTMENT.DEP_NAME, EMPLOYEE.COMM FROM DEPARTMENT INNER JOIN EMPLOYEE ON EMPLOYEE.DEP_NO=DEPARTMENT.DEP_NO WHERE COMM is null or COMM=0 ORDER BY EMP_NAME;
+
+32. List name and salary of all employee in department number l0 and 30
+Ans: SELECT EMP_NAME, SALARY, DEP_NO FROM EMPLOYEE WHERE DEP_NO=10 OR DEP_NO=30;
+
+
+33. List jobs of employees in department 30 which are not done in department 40.
+Ans: SELECT JOB, DEP_NO FROM EMPLOYEE WHERE DEP_NO=30 AND JOB NOT IN (SELECT JOB FROM EMPLOYEE WHERE DEP_NO=40);
+
+
+34. List out job and salary of employees in department l0 and 40 who draw the same salary.
+Ans: SELECT JOB, SALARY FROM EMPLOYEE WHERE DEP_NO=10 AND SALARY=ALL(SELECT SALARY FROM EMPLOYEE WHERE DEP_NO=40);
+
+NO DATA IS FOUND
+35. Create a view to display EMPNO’ NAME’ JOB of employee from employee table who works as manager.
+Ans: CREATE VIEW EMPLOYEE_TABLE(EMPNO, EMP_NAME, JOB) AS SELECT EMPNO, EMP_NAME, JOB FROM EMPLOYEE WHERE JOB='MNGR';
+SELECT * FROM EMPLOYEE_TABLE;
+
+
+
+36. Select EMPNO, NAME, JOB and SALARY of employee who works as clerk and having salary greater than 1650.
+Ans: SELECT EMPNO, EMP_NAME, JOB, SALARY FROM EMPLOYEE WHERE SALARY>1650 AND JOB='CLRK';
+
+
+
+
+
+
+
+
+
+37. Create an index for column FNAME and LNAME in Dependant table
+Ans: CREATE INDEX LNAME_FNAME
+ON DEPENDANT(FNAME, LNAME);
+SELECT index_name, index_type, table_name 
+FROM all_indexes
+WHERE table_name = 'DEPENDANT';
+
+
+
+38. Delete person with ID=1031 in Dependant table.
+Ans: DELETE FROM DEPENDANT WHERE PID=1031;
+SELECT * FROM DEPENDANT;
+
+
+
+39. Return EMPNO, NAME and SALARY of any one of the females in department 10.
+Ans: SELECT EMPNO, EMP_NAME, SALARY, DEP_NO FROM EMPLOYEE WHERE SEX='F' AND DEP_NO=10 AND ROWNUM=1;
+
+
+40. Delete the employee Karthika with all her dependants.
+Ans: DELETE FROM EMPLOYEE WHERE EMP_NAME = 'Karthika';
+         SELECT * FROM EMPLOYEE;
+    SELECT * FROM DEPENDANT;
+
+    
+
+
+    
+
+RESULT:
+Successfully written queries to create and retrieve department and employee relations using relationship constraints, indices, DDL & amp; DML commands, Views, built in functions, set operations, aggregate functions, grouping and ordering clauses and results were obtained.
+
+
+
+
+
